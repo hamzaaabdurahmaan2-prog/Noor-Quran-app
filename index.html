@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Noor Quran Academy – أكاديمية نور القرآن</title>
+<style>
+:root{--g:#0f5c3a;--g2:#167a4d;--gold:#c9a227;--bg:#f6f4ec;--card:#fff;--tx:#1d2b24;--mu:#66756d;--bd:#e3dfcf;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1814;--card:#16251e;--tx:#eaf1ec;--mu:#9bb0a4;--bd:#25382f}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:76px;line-height:1.5}
+.ar{font-family:"Amiri","Scheherazade New","Noto Naskh Arabic",serif;direction:rtl}
+header{background:linear-gradient(135deg,var(--g),var(--g2));color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--gold)}
+header b{font-size:15px;display:block}header .ar{font-size:18px;color:var(--gold)}
+select{border-radius:8px;border:0;padding:6px;background:#fff;color:#0f5c3a;font-weight:600}
+main{padding:14px;max-width:640px;margin:auto}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+h2{margin:0 0 8px;font-size:18px;color:var(--g)}h3{margin:0 0 6px;font-size:16px}
+@media (prefers-color-scheme:dark){h2{color:var(--gold)}}
+.mu{color:var(--mu);font-size:13px}
+.btn{background:var(--g);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-size:15px;font-weight:600;cursor:pointer}
+.btn.gold{background:var(--gold);color:#222}.btn.out{background:transparent;color:var(--g);border:1.5px solid var(--g)}
+.btn:disabled{opacity:.5}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--g2),var(--gold))}
+.row{display:flex;gap:10px;align-items:center}.sp{justify-content:space-between}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{text-align:center}.stat b{font-size:22px;color:var(--g);display:block}
+@media (prefers-color-scheme:dark){.stat b{color:var(--gold)}}
+.item{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;background:var(--card);cursor:pointer;width:100%;text-align:start;color:var(--tx);font-size:15px}
+.ic{width:40px;height:40px;border-radius:50%;background:var(--g);color:var(--gold);display:grid;place-items:center;font-size:20px;flex:none}
+.ok{color:var(--g2);font-weight:700}
+.ex{font-size:24px;line-height:2;background:rgba(201,162,39,.12);border-radius:10px;padding:6px 12px;margin:6px 0;text-align:center}
+.L{display:grid;place-items:center;border:1px solid var(--bd);border-radius:10px;padding:6px 0;font-size:26px;cursor:pointer;background:var(--card);color:var(--tx)}
+.L small{font-size:11px;color:var(--mu);font-family:system-ui}.L.on{background:var(--g);color:#fff}.L.on small{color:var(--gold)}
+.opt{display:block;width:100%;text-align:start;padding:12px;margin:6px 0;border-radius:10px;border:1.5px solid var(--bd);background:var(--card);color:var(--tx);font-size:16px;cursor:pointer}
+.opt.good{border-color:#1a9a57;background:rgba(26,154,87,.18)}.opt.bad{border-color:#c0392b;background:rgba(192,57,43,.15)}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:2px solid var(--gold);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav button{flex:1;background:none;border:0;padding:9px 0 7px;font-size:11px;color:var(--mu);cursor:pointer}nav button span{display:block;font-size:20px}
+nav button.on{color:var(--g);font-weight:700}@media (prefers-color-scheme:dark){nav button.on{color:var(--gold)}}
+input[type=text]{width:100%;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:16px}
+.av{width:64px;height:64px;border-radius:50%;background:var(--gold);color:#222;display:grid;place-items:center;font-size:28px;font-weight:700;overflow:hidden;flex:none}.av img{width:100%;height:100%;object-fit:cover}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:6px;border-bottom:1px solid var(--bd);text-align:start}
+.pat{height:6px;background:repeating-linear-gradient(45deg,var(--gold) 0 6px,transparent 6px 12px);opacity:.5}
+</style>
+</head>
+<body>
+<header><div><b id="ttl">Noor Quran Academy</b><span class="ar">أكاديمية نور القرآن</span></div>
+<select id="lang"><option value="om">Oromoo</option><option value="ar">العربية</option><option value="en">English</option></select></header>
+<div class="pat"></div>
+<main id="m"></main>
+<nav id="nav"></nav>
+<script>
+const I={om:0,ar:1,en:2};
+const U={
+hello:['Baga nagaan dhufte','أهلاً بك','Welcome'],
+home:['Fuula jalqabaa','الرئيسية','Home'],learn:['Barnoota','الدروس','Learn'],quiz:['Qormaata','اختبار','Quiz'],hifz:['Hifzii','الحفظ','Hifz'],me:['Ani','حسابي','Me'],
+lvl:['Sadarkaa','المستوى','Level'],done:['Xumurame','المكتمل','Done'],goal:['Galma har’aa','هدف اليوم','Today’s goal'],streak:['Guyyaa walitti aanan','أيام متتالية','Day streak'],
+cont:['Itti fufi','تابع','Continue'],start:['Jalqabi','ابدأ','Start'],mark:['Xumure jedhi','تم الدرس','Mark as done'],marked:['Xumurameera ✓','تم ✓','Completed ✓'],
+courses:['Koorsiiwwan','الدورات','Courses'],lessons:['Barnoota Tajwiidaa','دروس التجويد','Tajwid lessons'],enroll:['Galmaa’i','سجّل','Enroll'],enrolled:['Galmaa’eerta ✓','مسجّل ✓','Enrolled ✓'],
+score:['Qabxii','النتيجة','Score'],best:['Qabxii olaanaa','أفضل نتيجة','Best score'],again:['Irra deebi’i','أعد','Retry'],next:['Itti aanu','التالي','Next'],
+correct:['Sirrii dha! ✓','صحيح! ✓','Correct! ✓'],wrong:['Hin sirrii miti ✗','خطأ ✗','Incorrect ✗'],name:['Maqaa kee','اسمك','Your name'],save:['Olkaa’i','حفظ','Save'],
+role:['Gaheessa','الدور','Role'],student:['Barataa','طالب','Student'],teacher:['Barsiisaa','معلم','Teacher'],attend:['Argamuu','الحضور','Attendance'],checkin:['Har’a argameera','سجّل حضور اليوم','Check in today'],
+report:['Gabaasa guddinaa','تقرير التقدم','Progress report'],backend:['Wantoota backend barbaadan','متطلبات الخادم (Backend)','Backend requirements'],
+memo:['Hubadheera','حفظت','Memorized'],review:['Muraaja’i','راجع','Review'],times:['si’a','مرات','times'],sched:['Sagantaa barnootaa','جدول الدروس','Class schedule'],students:['Barattoota (fakkeenya)','الطلاب (نموذج)','Students (sample)'],
+term:['Hiika jechootaa','معاني المصطلحات','Terms'],practice:['Shaakala','تدريب','Practice'],ex:['Fakkeenya Qur’aanaa','أمثلة قرآنية','Quranic examples'],
+tap:['Qubee tuqi, maqaa isaa ilaali','اضغط على حرف لترى اسمه','Tap a letter to see its name'],photo:['Suuraa fe’i','أضف صورة','Add photo'],
+lvn:[['Jalqabaa','مبتدئ','Beginner'],['Giddu galeessa','متوسط','Intermediate'],['Olaanaa','متقدم','Advanced']]
+};
+const LET='ا ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي'.split(' ');
+const LN='ألف,باء,تاء,ثاء,جيم,حاء,خاء,دال,ذال,راء,زاي,سين,شين,صاد,ضاد,طاء,ظاء,عين,غين,فاء,قاف,كاف,لام,ميم,نون,هاء,واو,ياء'.split(',');
+const LS=[
+{id:'harf',ic:'ا',t:['Qubee Arabaa','الحروف العربية','Arabic letters'],
+d:['Qubeewwan Arabaa 28 dha; sirraa gara bitaatti barreeffamu. Qubee tokkoon tokkoon bifa 4 qaba: kophaa, jalqaba, giddu, dhuma. Maqaa fi sagalee isaa dura baradhu.','الحروف العربية 28 حرفاً وتُكتب من اليمين إلى اليسار، ولكل حرف أربعة أشكال: منفصل وأول ووسط وآخر.','There are 28 Arabic letters, written right to left. Each has four forms: isolated, initial, medial and final. Learn the name and sound first.'],
+w:['',  '', ''],ex:['بَ تَ ثَ','ب ت ث'],p:['Qubee hunda dhuqi, sagalee isaa jabeessii dubbisi.','اضغط كل حرف وكرر نطقه.','Tap each letter and repeat its sound aloud.'],letters:1},
+{id:'makh',ic:'م',t:['Makhaarijul Huruuf (مخارج الحروف)','مخارج الحروف','Makharij al-Huruf'],
+d:['Makhaarij = bakka qubeen itti ba’u. Shanii dha: 1) Jawf (afaan keessaa – ا و ي), 2) Halq (qoonqoo – ء ه ع ح غ خ), 3) Lisaan (arraba – qubee 18), 4) Shafatayn (hidhii – ب م و ف), 5) Khayshoom (funyaan – ghunna).','المخارج خمسة: الجوف، الحلق، اللسان، الشفتان، الخيشوم.','Makharij are the articulation points. Five areas: Jawf (oral cavity), Halq (throat – 6 letters), Lisaan (tongue – 18), Shafatayn (lips) and Khayshoom (nasal passage).'],
+w:['Makhraj = bakka ba’umsaa; Sifa = amala qubee.','المخرج: موضع خروج الحرف؛ الصفة: كيفية النطق.','Makhraj = exit point; Sifa = quality of the letter.'],ex:['ء هـ ع ح غ خ','حروف الحلق'],p:['Qubeewwan qoonqoo ib hin cabsin dubbisi: ع ح غ خ.','انطق حروف الحلق بوضوح: ع ح غ خ.','Pronounce the throat letters clearly: ع ح غ خ.']},
+{id:'noon',ic:'ن',t:['Seera Nuun Sakinah fi Tanwiin','أحكام النون الساكنة والتنوين','Rules of Noon Sakinah & Tanwin'],
+d:['Haalota 4: Izhaar (ifa baasuu) – qubee qoonqoo (ء ه ع ح غ خ) duuba. Idghaam (makuu) – ي ر م ل و ن duuba. Iqlaab (jijjiiruu) – ب duuba; nuunni gara meemii jijjiirama. Ikhfaa (dhokfachuu) – qubee 15 hafan duuba, ghunna waliin.','أربعة أحكام: الإظهار، الإدغام، الإقلاب، الإخفاء.','Four cases: Izhaar (clear) before throat letters; Idghaam (merge) before ي ر م ل و ن; Iqlaab (flip to meem) before ب; Ikhfaa (hide, with ghunna) before the other 15 letters.'],
+w:['Sakinah = sukuun qabu; Tanwiin = ــً ــٍ ــٌ.','ساكنة: بلا حركة؛ التنوين: نون زائدة ساكنة.','Sakinah = with sukun; Tanwin = the ـً ـٍ ـٌ endings.'],ex:['مَنْ آمَنَ','مِن رَّبِّهِمْ','مِنْ بَعْدِ','مِن قَبْلُ'],p:['Fakkeenyota afuran ibsi: sadarkaa tokkoon tokkoon isaanii maali?','حدد الحكم في كل مثال.','Name the rule in each example above.']},
+{id:'meem',ic:'مْ',t:['Seera Meem Sakinah','أحكام الميم الساكنة','Rules of Meem Sakinah'],
+d:['Haalota 3: Ikhfaa Shafawi – ب duuba (ghunna waliin). Idghaam Shafawi – م duuba (meem lamaan makamu). Izhaar Shafawi – qubee kaan duuba (ifa baasuu).','ثلاثة أحكام: إخفاء شفوي، إدغام شفوي، إظهار شفوي.','Three cases: Ikhfaa Shafawi before ب; Idghaam Shafawi before م; Izhaar Shafawi before all other letters.'],
+w:['Shafawi = hidhii irraa.','شفوي: من الشفتين.','Shafawi = of the lips.'],ex:['تَرْمِيهِم بِحِجَارَةٍ','لَهُم مَّا يَشَاءُونَ','أَنتُمْ عَابِدُونَ'],p:['Fakkeenya tokkoon tokkoon seera isaa adda baasi.','حدد الحكم في كل مثال.','Identify the rule for each example.']},
+{id:'madd',ic:'~',t:['Madoota (المدود)','المدود','Madd (elongation)'],
+d:['Madd Tabii’i: harkaat 2 – ا و ي booda hamza ykn sukuun hin jiru. Madd Muttasil: hamza jecha tokko keessatti – 4-5. Madd Munfasil: hamza jecha itti aanu – 4-5. Madd Laazim: sukuun jabaa booda – 6.','المد الطبيعي (حركتان)، المتصل، المنفصل، اللازم (6 حركات).','Natural madd: 2 counts. Muttasil: hamza in the same word, 4-5. Munfasil: hamza in the next word, 4-5. Lazim: after a permanent sukun, 6 counts.'],
+w:['Harkah = yeroo ittiin quba tokko cufuu fi banuu.','الحركة: مقدار قبض الإصبع وبسطه.','A count = the time of closing/opening a finger.'],ex:['قَالُوا','السَّمَاءِ','بِمَا أُنزِلَ','الْحَاقَّةُ'],p:['Fakkeenya tokkoon tokkoon madd akkamii jedhii deebisi.','سمّ نوع المد في كل كلمة.','Name the madd type of each word.']},
+{id:'qalq',ic:'ق',t:['Qalqalah (القلقلة)','القلقلة','Qalqalah'],
+d:['Qalqalah = sagalee sochii qaama qubee sukuun qabu irratti. Qubeewwan: ق ط ب ج د (قطب جد). Sughraa: jecha giddutti. Kubraa: dhaabbii irratti.','القلقلة: اضطراب الصوت في الحرف الساكن. حروفها: قطب جد.','Qalqalah is a slight echo on a silent letter. Letters: ق ط ب ج د (qutb jad). Sughra mid-word; Kubra when stopping.'],
+w:['Qalqalah = hollachuu/sochii.','القلقلة: الاضطراب.','Qalqalah = shaking/echo.'],ex:['يَجْعَلُونَ','الْفَلَقِ','أَحَدٌ'],p:['Qubee qalqalah jecha tokkoo tokkoo keessaa baasi.','استخرج حرف القلقلة من كل كلمة.','Find the qalqalah letter in each word.']},
+{id:'tafk',ic:'ص',t:['Tafkhiim fi Tarqiiq','التفخيم والترقيق','Tafkhim & Tarqiq'],
+d:['Tafkhiim = sagalee furdisuu (jabaa). Qubeewwan 7: خ ص ض غ ط ق ظ (خص ضغط قظ). Tarqiiq = sagalee salphisuu (qubee kaan). “ر” fi “الله” seera addaa qabu.','التفخيم: تسمين الصوت وحروفه: خص ضغط قظ. والترقيق: تنحيف الصوت.','Tafkhim = heavy, full sound; letters: خ ص ض غ ط ق ظ. Tarqiq = light, thin sound for the rest. Ra and the word Allah have special rules.'],
+w:['Isti’laa = ol ka’uu arraba.','الاستعلاء: ارتفاع اللسان.','Isti’la = raising of the tongue.'],ex:['الصَّمَدُ','الضَّالِّينَ','قُلْ'],p:['“ص” fi “س” walbira qabii dubbisi.','قارن بين ص وس في النطق.','Compare the sounds of ص and س.']}
+];
+const CO=[['📖',['Qur’aana dubbisuu jalqabaa','القراءة للمبتدئين','Beginner Quran reading']],['🎙️',['Barnoota Tajwiidaa','دورة التجويد','Tajwid course']],['🧠',['Hifzii Qur’aanaa','حفظ القرآن','Quran memorization']],['🔁',['Muraaja’aa Qur’aanaa','مراجعة القرآن','Quran review (muraja’a)']],['👤',['Barnoota dhuunfaa barsiisaa waliin','دروس خاصة مع معلم','Private lessons with a teacher']]];
+const SU=[['الفاتحة','Al-Fatiha',7],['الإخلاص','Al-Ikhlas',4],['الفلق','Al-Falaq',5],['الناس','An-Nas',6],['الكوثر','Al-Kawthar',3],['العصر','Al-Asr',3]];
+const Q=[
+{q:['Qubeewwan qalqalah isaan kami?','ما هي حروف القلقلة؟','Which are the qalqalah letters?'],o:['ق ط ب ج د','ء هـ ع ح غ خ','ي ر م ل و ن','خ ص ض غ ط ق ظ'],a:0,e:['Qalqalah = قطب جد.','القلقلة: قطب جد.','Qalqalah letters are قطب جد.']},
+{q:['Nuun sakinah booda ب yoo dhufe seerri isaa?','النون الساكنة قبل الباء حكمها؟','Noon sakinah before ب gives which rule?'],o:['Izhaar إظهار','Idghaam إدغام','Iqlaab إقلاب','Ikhfaa إخفاء'],a:2,e:['Nuunni gara meemii jijjiirama – Iqlaab.','تُقلب ميماً: إقلاب.','Noon flips into a meem: Iqlaab.']},
+{q:['Madd Tabii’i harkaat 2 dha.','المد الطبيعي حركتان.','Natural madd lasts 2 counts.'],o:['Dhugaa / صح / True','Soba / خطأ / False'],a:0,e:['Dhugaa dha: harkaat 2.','صحيح: حركتان.','True: two counts.']},
+{q:['ب qubee tafkhiim keessatti ramadamti.','الباء من حروف التفخيم.','ب is a heavy (tafkhim) letter.'],o:['Dhugaa / صح / True','Soba / خطأ / False'],a:1,e:['Soba: tafkhiim = خ ص ض غ ط ق ظ.','خطأ: المفخمة خص ضغط قظ.','False: the heavy letters are خ ص ض غ ط ق ظ.']},
+{q:['Qubeewwan qoonqoo (Halq) meeqa?','كم حرف حلقي؟','How many throat (Halq) letters?'],o:['6','5','3','17'],a:0,e:['ء ه ع ح غ خ = 6.','ء هـ ع ح غ خ = 6.','ء ه ع ح غ خ = 6.']},
+{q:['Meem sakinah booda ب yoo dhufe?','الميم الساكنة قبل الباء؟','Meem sakinah before ب?'],o:['Izhaar Shafawi','Idghaam Shafawi','Ikhfaa Shafawi','Iqlaab'],a:2,e:['Ikhfaa Shafawi ghunna waliin.','إخفاء شفوي مع غنة.','Ikhfaa Shafawi with ghunna.']}
+];
+const DEF={lang:'om',name:'',role:'student',photo:'',done:{},scores:[],goal:3,today:{d:'',n:0},enr:{},att:[],last:'harf',memo:{},rev:{}};
+let S;try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem('nqa')||'{}'))}catch(e){S=Object.assign({},DEF)}
+const sv=()=>{try{localStorage.setItem('nqa',JSON.stringify(S))}catch(e){}};
+const t=k=>U[k][I[S.lang]];const g=a=>a[I[S.lang]]??a[2];
+const day=()=>new Date().toISOString().slice(0,10);
+function tick(){if(S.today.d!==day())S.today={d:day(),n:0};S.today.n++;sv()}
+const nDone=()=>Object.keys(S.done).length;
+const lvl=()=>nDone()>=5?2:nDone()>=2?1:0;
+const streak=()=>{let c=0,d=new Date();for(;;){const k=d.toISOString().slice(0,10);if(S.att.includes(k)||(c===0&&false))c++;else if(c>0||k!==day())break;d.setDate(d.getDate()-1);if(c>400)break}return c};
+const m=document.getElementById('m');let tab='home',view=null,qs=null;
+function setLang(){document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.getElementById('lang').value=S.lang}
+function nav(){const T=[['home','🏠'],['learn','📚'],['quiz','✅'],['hifz','🕋'],['me','👤']];document.getElementById('nav').innerHTML=T.map(([k,i])=>`<button class="${tab===k?'on':''}" onclick="go('${k}')"><span>${i}</span>${t(k)}</button>`).join('')}
+function go(k,v){tab=k;view=v||null;if(k==='quiz'&&!v)qs=null;render()}
+function render(){setLang();nav();({home,learn,quiz,hifz,me})[tab]();window.scrollTo(0,0)}
+function home(){const p=Math.round(nDone()/LS.length*100),gn=Math.min(100,Math.round(S.today.d===day()?S.today.n/S.goal*100:0));
+m.innerHTML=`<div class="card"><div class="row"><div class="av">${S.photo?`<img src="${S.photo}" alt="">`:(S.name||'N')[0].toUpperCase()}</div><div><h2 style="margin:0">${t('hello')}${S.name?', '+esc(S.name):''}</h2><div class="mu">${t('lvl')}: <b>${g(U.lvn[lvl()])}</b></div></div></div></div>
+<div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="card stat"><b>${nDone()}/${LS.length}</b><span class="mu">${t('done')}</span></div><div class="card stat"><b>${lvl()+1}</b><span class="mu">${t('lvl')}</span></div><div class="card stat"><b>🔥${streak()}</b><span class="mu">${t('streak')}</span></div></div>
+<div class="card"><h3>${t('goal')} (${S.today.d===day()?S.today.n:0}/${S.goal})</h3><div class="bar"><i style="width:${gn}%"></i></div></div>
+<div class="card"><h3>${t('done')}: ${p}%</h3><div class="bar"><i style="width:${p}%"></i></div>
+<button class="btn gold" onclick="go('learn','${S.last}')">${t('cont')} → ${g(LS.find(x=>x.id===S.last).t)}</button></div>
+<div class="card ar" style="text-align:center;font-size:24px;color:var(--g)">«وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا»</div>`}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function learn(){if(view)return lesson(view);
+m.innerHTML=`<div class="card"><h2>${t('courses')}</h2>${CO.map((c,i)=>`<div class="item" style="cursor:default"><div class="ic">${c[0]}</div><div style="flex:1">${g(c[1])}</div><button class="btn ${S.enr[i]?'out':''}" onclick="enr(${i})">${S.enr[i]?t('enrolled'):t('enroll')}</button></div>`).join('')}</div>
+<div class="card"><h2>${t('lessons')}</h2>${LS.map(l=>`<button class="item" onclick="go('learn','${l.id}')"><div class="ic ar">${l.ic}</div><div style="flex:1">${g(l.t)}</div><span class="ok">${S.done[l.id]?'✓':''}</span></button>`).join('')}</div>`}
+function enr(i){S.enr[i]=!S.enr[i];sv();learn()}
+function lesson(id){const l=LS.find(x=>x.id===id);S.last=id;sv();
+m.innerHTML=`<button class="btn out" onclick="go('learn')">←</button><div class="card" style="margin-top:10px"><h2>${g(l.t)}</h2><p>${g(l.d)}</p>
+${l.letters?`<p class="mu">${t('tap')}</p><div class="grid" id="lt">${LET.map((c,i)=>`<div class="L ar" onclick="pick(this,'${LN[i]}')">${c}<small></small></div>`).join('')}</div>`:''}
+${g(l.w)?`<h3 style="margin-top:12px">${t('term')}</h3><p class="mu">${g(l.w)}</p>`:''}
+<h3 style="margin-top:12px">${t('ex')}</h3>${(l.ex.length>1&&!l.letters?l.ex:[l.ex[0]]).map(x=>`<div class="ex ar">${x}</div>`).join('')}
+<h3 style="margin-top:12px">${t('practice')}</h3><p>${g(l.p)}</p>
+<button class="btn" ${S.done[id]?'disabled':''} onclick="fin('${id}')">${S.done[id]?t('marked'):t('mark')}</button></div>`}
+function pick(el,n){document.querySelectorAll('#lt .L').forEach(x=>{x.classList.remove('on');x.querySelector('small').textContent=''});el.classList.add('on');el.querySelector('small').textContent=n}
+function fin(id){S.done[id]=1;tick();lesson(id)}
+function quiz(){if(!qs){const b=S.scores.length?Math.max(...S.scores):0;m.innerHTML=`<div class="card"><h2>${t('quiz')}</h2><p class="mu">${Q.length} · ${t('best')}: ${b}/${Q.length}</p><button class="btn" onclick="qs={i:0,s:0,a:null};quiz()">${t('start')}</button></div>`;return}
+if(qs.i>=Q.length){m.innerHTML=`<div class="card" style="text-align:center"><h2>${t('score')}</h2><div style="font-size:42px;color:var(--gold);font-weight:800">${qs.s}/${Q.length}</div><button class="btn" onclick="qs=null;quiz()">${t('again')}</button></div>`;return}
+const q=Q[qs.i];m.innerHTML=`<div class="card"><div class="mu">${qs.i+1}/${Q.length} · ${t('score')}: ${qs.s}</div><h3>${g(q.q)}</h3>${q.o.map((o,i)=>`<button class="opt ${qs.a!==null?(i===q.a?'good':i===qs.a?'bad':''):''}" ${qs.a!==null?'disabled':''} onclick="ans(${i})">${o}</button>`).join('')}
+${qs.a!==null?`<p><b>${qs.a===q.a?t('correct'):t('wrong')}</b> ${g(q.e)}</p><button class="btn" onclick="qs.i++;qs.a=null;quiz()">${t('next')}</button>`:''}</div>`}
+function ans(i){qs.a=i;if(i===Q[qs.i].a)qs.s++;if(qs.i===Q.length-1){S.scores.push(qs.s);tick()}quiz()}
+function hifz(){const k=Object.keys(S.memo).length;
+m.innerHTML=`<div class="card"><h2>${t('hifz')} / ${t('review')}</h2><div class="bar"><i style="width:${k/SU.length*100}%"></i></div><span class="mu">${k}/${SU.length}</span></div>`+SU.map((s,i)=>`<div class="card"><div class="row sp"><div><b class="ar" style="font-size:22px">سورة ${s[0]}</b><div class="mu">${s[1]} · ${s[2]}</div></div><button class="btn ${S.memo[i]?'out':''}" onclick="S.memo[${i}]=!S.memo[${i}];if(!S.memo[${i}])delete S.memo[${i}];sv();hifz()">${t('memo')}${S.memo[i]?' ✓':''}</button></div>
+${S.memo[i]?`<div class="row sp" style="margin-top:8px"><span class="mu">${t('review')}: ${S.rev[i]||0} ${t('times')}</span><button class="btn gold" onclick="S.rev[${i}]=(S.rev[${i}]||0)+1;tick();hifz()">${t('review')}</button></div>`:''}</div>`).join('')}
+function me(){const b=S.scores.length?Math.max(...S.scores):0,td=S.att.includes(day());
+m.innerHTML=`<div class="card"><div class="row"><div class="av">${S.photo?`<img src="${S.photo}" alt="">`:(S.name||'N')[0].toUpperCase()}</div><div style="flex:1"><input type="text" id="nm" placeholder="${t('name')}" value="${esc(S.name)}"><label class="mu"><input type="file" accept="image/*" id="ph" style="display:none"><u>${t('photo')}</u></label></div></div>
+<p><span class="mu">${t('role')}:</span> <select id="rl"><option value="student" ${S.role==='student'?'selected':''}>${t('student')}</option><option value="teacher" ${S.role==='teacher'?'selected':''}>${t('teacher')}</option></select>
+&nbsp;<span class="mu">${t('goal')}:</span> <select id="gl">${[1,2,3,4,5].map(n=>`<option ${n===S.goal?'selected':''}>${n}</option>`).join('')}</select></p>
+<button class="btn" onclick="S.name=document.getElementById('nm').value.trim();sv();me()">${t('save')}</button></div>
+<div class="card"><h2>${t('attend')}</h2><p class="mu">🔥 ${streak()} · ${S.att.length}</p><button class="btn gold" ${td?'disabled':''} onclick="S.att.push(day());sv();me()">${td?'✓':t('checkin')}</button></div>
+<div class="card"><h2>${t('report')}</h2><table><tr><td>${t('lvl')}</td><td>${g(U.lvn[lvl()])}</td></tr><tr><td>${t('done')}</td><td>${nDone()}/${LS.length}</td></tr><tr><td>${t('best')}</td><td>${b}/${Q.length}</td></tr><tr><td>${t('hifz')}</td><td>${Object.keys(S.memo).length}/${SU.length}</td></tr><tr><td>${t('courses')}</td><td>${Object.keys(S.enr).filter(k=>S.enr[k]).length}/${CO.length}</td></tr></table></div>
+<div class="card"><h2>${t('sched')}</h2><table><tr><td>Mon · Wed</td><td>5:00 PM</td><td>${g(CO[1][1])}</td></tr><tr><td>Tue · Thu</td><td>6:00 PM</td><td>${g(CO[2][1])}</td></tr><tr><td>Sat</td><td>9:00 AM</td><td>${g(CO[3][1])}</td></tr></table></div>
+${S.role==='teacher'?`<div class="card"><h2>${t('students')}</h2><table><tr><td>Hamza A.</td><td>5/7</td><td>5/6</td></tr><tr><td>Fatima M.</td><td>3/7</td><td>4/6</td></tr><tr><td>Abdulaziz T.</td><td>7/7</td><td>6/6</td></tr><tr><td>Amina K.</td><td>1/7</td><td>2/6</td></tr></table></div>`:''}
+<div class="card"><h3>⚙️ ${t('backend')}</h3><ul class="mu" style="padding-inline-start:18px;margin:6px 0">
+<li>Auth (login, roles: student/teacher/admin)</li><li>Database: users, lessons, quizzes, progress, attendance, schedule</li><li>Cloud sync of progress across devices</li><li>Audio recitation (CDN) + full Quran text/API</li><li>Real payments & teacher booking (when needed)</li><li>Push notifications for daily goals & classes</li></ul></div>`;
+document.getElementById('rl').onchange=e=>{S.role=e.target.value;sv();me()};document.getElementById('gl').onchange=e=>{S.goal=+e.target.value;sv()};
+document.getElementById('ph').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=96;const x=c.getContext('2d'),s=Math.min(im.width,im.height);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,96,96);S.photo=c.toDataURL('image/jpeg',.7);sv();me()};im.src=r.result};r.readAsDataURL(f)}}
+document.getElementById('lang').onchange=e=>{S.lang=e.target.value;sv();render()};
+render();
+</script>
+</body>
+</html>
