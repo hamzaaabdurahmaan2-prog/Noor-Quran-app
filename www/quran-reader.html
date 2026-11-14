@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="om" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Qur'aana Kareem – Noor Quran Academy</title>
+<style>
+:root{
+  --green:#0f5a3c; --green-d:#0a3f2a; --gold:#b8913a; --gold-l:#f3e7c4;
+  --paper:#fffdf6; --ink:#1d2a24; --mute:#6b7a72; --line:#e6dfc9;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--green);color:#fff;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;
+  display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--gold)}
+header h1{font-size:17px;margin:0;flex:1;font-weight:600}
+header button{background:transparent;border:0;color:#fff;font-size:20px;padding:6px 10px;border-radius:8px}
+header button:active{background:var(--green-d)}
+main{padding:12px 14px calc(24px + env(safe-area-inset-bottom,0px));max-width:720px;margin:0 auto}
+.hidden{display:none!important}
+input[type=search]{width:100%;padding:12px 14px;font-size:16px;border:1px solid var(--line);
+  border-radius:10px;background:#fff;margin-bottom:10px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 6px;border-bottom:1px solid var(--line)}
+.row:active{background:var(--gold-l)}
+.num{min-width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--green)}
+.row .nm{flex:1;font-size:16px}
+.row .meta{font-size:12px;color:var(--mute)}
+.ar{font-family:"Noto Naskh Arabic","Amiri","Scheherazade New","Traditional Arabic",serif;direction:rtl}
+.row .arn{font-size:22px;color:var(--green)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:20px}
+.card h2{margin:0 0 8px;font-size:18px;color:var(--green)}
+.card p{margin:8px 0;line-height:1.5;font-size:15px}
+.btn{display:inline-block;background:var(--green);color:#fff;border:0;border-radius:10px;
+  padding:12px 18px;font-size:16px;margin-top:8px}
+.btn.alt{background:var(--gold-l);color:var(--green-d)}
+.err{color:#9b2226}
+.ok{color:var(--green)}
+#bismillah{text-align:center;font-size:var(--fs);color:var(--gold);margin:16px 0 6px;line-height:2}
+#text{font-size:var(--fs);line-height:2.3;text-align:justify;direction:rtl}
+#text .ay{cursor:pointer}
+#text .ay.mark{background:var(--gold-l);border-radius:6px}
+.an{display:inline-flex;align-items:center;justify-content:center;width:1.6em;height:1.6em;
+  margin:0 .25em;border:1.2px solid var(--gold);border-radius:50%;font-size:.5em;
+  color:var(--green);font-family:system-ui,sans-serif;vertical-align:middle}
+.bar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin:8px 0}
+.bar button{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:15px;color:var(--green)}
+.hit{padding:12px 4px;border-bottom:1px solid var(--line)}
+.hit small{color:var(--mute);display:block;margin-bottom:4px}
+.hit .ar{font-size:22px;line-height:2}
+.mutep{color:var(--mute);font-size:14px;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<header>
+  <button id="back" class="hidden" aria-label="Duubatti">←</button>
+  <h1 id="title">Qur'aana Kareem</h1>
+  <button id="fminus" class="hidden" aria-label="Xiqqeessi">A−</button>
+  <button id="fplus" class="hidden" aria-label="Guddisi">A+</button>
+</header>
+
+<main>
+  <!-- Import screen -->
+  <section id="setup" class="hidden">
+    <div class="card">
+      <h2>Qur'aana offline qopheessi</h2>
+        <p>Al tokko qofa fayilii Qur'aanaa filadhu. Booda internet malee yeroo hunda hojjata.</p>
+      <p>Fayilii <b>tanzil.net/download</b> irraa buufadhu: Quran Text Type = <b>Uthmani</b>, Output = <b>Text (with aya numbers)</b>. Fayiliin sararoota akka "1|1|…" jedhu qabaata.</p>
+      <input type="file" id="file" accept=".txt,text/plain" class="hidden">
+      <button class="btn" id="dl">Qur'aana buufadhu (internet al tokko)</button>
+      <p class="mutep">Yookiin fayilii Tanzil yoo qabaatte:</p>
+      <button class="btn alt" id="pick">Fayilii fili</button>
+      <p id="msg"></p>
+    </div>
+  </section>
+
+  <!-- Surah list -->
+  <section id="list" class="hidden">
+    <div id="resume" class="hidden"></div>
+    <input type="search" id="q" placeholder="Suurah ykn kalima barbaadi (Arabic)…">
+    <div id="items"></div>
+    <p class="mutep"><button class="btn alt" id="reset">Fayilii jijjiiri</button></p>
+  </section>
+
+  <!-- Search results -->
+  <section id="results" class="hidden"></section>
+
+  <!-- Reader -->
+  <section id="reader" class="hidden">
+    <div id="bismillah" class="ar"></div>
+    <div id="text" class="ar"></div>
+    <div class="bar">
+      <button id="prev">← Duraa</button>
+      <button id="next">Itti aanu →</button>
+    </div>
+  </section>
+</main>
+
+<script>
+const NAMES = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+
+const KEY = "nqa_quran_v1", POS = "nqa_pos_v1", FS = "nqa_fs_v1";
+const $ = id => document.getElementById(id);
+let quran = null;          // quran[s] = array of ayah strings (s = 1..114)
+let cur = 1;
+let fs = 28;
+
+function show(name){
+  for (const id of ["setup","list","results","reader"]) $(id).classList.toggle("hidden", id !== name);
+  const inList = name === "list";
+  $("back").classList.toggle("hidden", inList || name === "setup");
+  const rd = name === "reader";
+  $("fminus").classList.toggle("hidden", !rd);
+  $("fplus").classList.toggle("hidden", !rd);
+  if (inList) $("title").textContent = "Qur'aana Kareem";
+  window.scrollTo(0,0);
+}
+
+function load(){
+  try { const raw = localStorage.getItem(KEY); if (raw) return JSON.parse(raw); } catch(e){}
+  return null;
+}
+
+function parse(text){
+  const out = Array.from({length:115}, () => []);
+  let n = 0;
+  for (const line of text.split(/\r?\n/)) {
+    const t = line.trim();
+    if (!t || t[0] === "#") continue;
+    const a = t.indexOf("|"), b = t.indexOf("|", a + 1);
+    if (a < 1 || b < 0) continue;
+    const s = parseInt(t.slice(0, a), 10), y = parseInt(t.slice(a + 1, b), 10);
+    if (!(s >= 1 && s <= 114) || !(y >= 1)) continue;
+    out[s][y - 1] = t.slice(b + 1);
+    n++;
+  }
+  return { out, n };
+}
+
+function toArabicNum(n){ return String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]); }
+function norm(s){ return s.replace(/[\u0640\u064B-\u065F\u0670\u06D6-\u06ED]/g,"").replace(/[إأآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه"); }
+
+function buildList(filter){
+  const box = $("items"); box.innerHTML = "";
+  const f = filter ? norm(filter.trim()) : "";
+  for (let s = 1; s <= 114; s++) {
+    if (f && !(norm(NAMES[s-1]).includes(f) || String(s) === f)) continue;
+    const r = document.createElement("div"); r.className = "row";
+    r.innerHTML = `<div class="num">${s}</div>
+      <div class="nm">Suurah ${s}<div class="meta">Aayaata ${quran[s].length}</div></div>
+      <div class="arn ar">${NAMES[s-1]}</div>`;
+    r.onclick = () => openSurah(s, 1);
+    box.appendChild(r);
+  }
+}
+
+function openSurah(s, scrollTo){
+  cur = s;
+  $("title").textContent = "Suurah " + s + " · " + NAMES[s-1];
+  const box = $("text"); box.innerHTML = "";
+  const bis = $("bismillah");
+  // Bismillah (taken from ayah 1:1 of the file itself) for every surah except Al-Fatiha and At-Tawba
+  if (s !== 1 && s !== 9 && quran[1][0]) { bis.textContent = quran[1][0]; bis.classList.remove("hidden"); }
+  else bis.classList.add("hidden");
+  quran[s].forEach((t, i) => {
+    const sp = document.createElement("span"); sp.className = "ay"; sp.id = "a" + (i+1);
+    sp.innerHTML = t + `<span class="an">${toArabicNum(i+1)}</span> `;
+    sp.onclick = () => { savePos(s, i+1); document.querySelectorAll(".ay.mark").forEach(e=>e.classList.remove("mark")); sp.classList.add("mark"); };
+    box.appendChild(sp);
+  });
+  $("prev").style.visibility = s > 1 ? "visible" : "hidden";
+  $("next").style.visibility = s < 114 ? "visible" : "hidden";
+  show("reader");
+  savePos(s, scrollTo || 1);
+  if (scrollTo > 1) {
+    const el = $("a" + scrollTo);
+    if (el) { el.classList.add("mark"); setTimeout(() => el.scrollIntoView({block:"center"}), 50); }
+  }
+}
+
+function savePos(s, a){ try { localStorage.setItem(POS, JSON.stringify({s, a})); } catch(e){} }
+function getPos(){ try { return JSON.parse(localStorage.getItem(POS)); } catch(e){ return null; } }
+
+function setFs(v){
+  fs = Math.max(18, Math.min(52, v));
+  document.documentElement.style.setProperty("--fs", fs + "px");
+  try { localStorage.setItem(FS, String(fs)); } catch(e){}
+}
+
+function goList(){
+  show("list");
+  const p = getPos(), r = $("resume");
+  if (p && quran[p.s] && quran[p.s].length) {
+    r.classList.remove("hidden");
+    r.innerHTML = `<button class="btn" style="width:100%;margin:0 0 10px">Itti fufi: Suurah ${p.s} · ${NAMES[p.s-1]} · aayah ${p.a}</button>`;
+    r.firstChild.onclick = () => openSurah(p.s, p.a);
+  } else r.classList.add("hidden");
+  buildList($("q").value);
+}
+
+function search(term){
+  const f = norm(term.trim());
+  const res = $("results"); res.innerHTML = "";
+  let hits = 0;
+  for (let s = 1; s <= 114 && hits < 50; s++) {
+    quran[s].forEach((t, i) => {
+      if (hits < 50 && norm(t).includes(f)) {
+        hits++;
+        const d = document.createElement("div"); d.className = "hit";
+        d.innerHTML = `<small>Suurah ${s} · ${NAMES[s-1]} · aayah ${i+1}</small><div class="ar">${t}</div>`;
+        d.onclick = () => openSurah(s, i+1);
+        res.appendChild(d);
+      }
+    });
+  }
+  if (!hits) res.innerHTML = '<p class="mutep">Homaa hin argamne.</p>';
+  else if (hits >= 50) res.insertAdjacentHTML("beforeend", '<p class="mutep">Bu\'aa 50 jalqabaa qofa agarsiifameera.</p>');
+  $("title").textContent = "Barbaacha";
+  show("results");
+}
+
+// ---------- events ----------
+$("dl").onclick = async () => {
+  const msg = $("msg"), btn = $("dl");
+  btn.disabled = true; msg.className = ""; msg.textContent = "Buufamaa jira… eegi.";
+  try {
+    const r = await fetch("https://api.alquran.cloud/v1/quran/quran-uthmani");
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const j = await r.json();
+    const out = Array.from({length:115}, () => []);
+    let n = 0;
+    for (const su of j.data.surahs) {
+      for (const a of su.ayahs) { out[su.number][a.numberInSurah - 1] = a.text; n++; }
+    }
+    if (n !== 6236) throw new Error("Aayaata " + n + "/6236 qofa");
+    // Bismillah ayah 1 irraa haqi (Faatiha fi Tawba malee): jecha 4 jalqabaa
+    const bis = norm(out[1][0]);
+    for (let s = 2; s <= 114; s++) {
+      if (s === 9) continue;
+      const w = out[s][0].split(" ");
+      if (norm(w.slice(0, 4).join(" ")) === bis) out[s][0] = w.slice(4).join(" ");
+    }
+    localStorage.setItem(KEY, JSON.stringify(out));
+    quran = out; msg.className = "ok"; msg.textContent = "Milkaa'eera ✓";
+    goList();
+  } catch (err) {
+    msg.className = "err";
+    msg.textContent = "Hin milkoofne: " + err.message + ". Data/Wi-Fi akka banaa ta'e mirkaneessi, irra deebi'ii yaali.";
+  } finally { btn.disabled = false; }
+};
+$("pick").onclick = () => $("file").click();
+$("file").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  const msg = $("msg");
+  try {
+    const { out, n } = parse(await f.text());
+    if (n < 6236) { msg.className = "err"; msg.textContent = `Fayilii kun guutuu miti (${n}/6236 aayaata). Fayilii Tanzil "with aya numbers" fayyadami.`; return; }
+    localStorage.setItem(KEY, JSON.stringify(out));
+    quran = out; msg.className = "ok"; msg.textContent = "Milkaa'eera ✓";
+    goList();
+  } catch(err) {
+    msg.className = "err"; msg.textContent = "Fayilii kana dubbisuun hin danda'amne: " + err.message;
+  }
+};
+$("q").addEventListener("input", e => buildList(e.target.value));
+$("q").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.value.trim()) search(e.target.value); });
+$("back").onclick = goList;
+$("fplus").onclick = () => setFs(fs + 2);
+$("fminus").onclick = () => setFs(fs - 2);
+$("prev").onclick = () => openSurah(cur - 1, 1);
+$("next").onclick = () => openSurah(cur + 1, 1);
+$("reset").onclick = () => { if (confirm("Fayilii Qur'aanaa haaraa filachuu barbaaddaa?")) { show("setup"); $("title").textContent = "Qur'aana offline"; } };
+
+// ---------- start ----------
+(async function(){
+  const saved = parseInt(localStorage.getItem(FS) || "28", 10); setFs(saved || 28);
+  quran = load();
+  if (quran) { goList(); return; }
+  // Fayiliin quran-uthmani.txt tokko fuula kana bira yoo jiraate, ofumaan fe'ama
+  try {
+    const r = await fetch("quran-uthmani.txt");
+    if (r.ok) {
+      const { out, n } = parse(await r.text());
+      if (n >= 6236) {
+        quran = out;
+        try { localStorage.setItem(KEY, JSON.stringify(out)); } catch(e){}
+        goList(); return;
+      }
+    }
+  } catch(e){}
+  $("title").textContent = "Qur'aana offline"; show("setup");
+})();
+</script>
+</body>
+</html>
