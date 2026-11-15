@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="om" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Noor Quran Academy</title>
+<style>
+  :root{--green:#0f5132;--green-d:#0a3a24;--gold:#b8892b;--gold-l:#f3e7c9;--bg:#fbfaf5;--card:#fff;--ink:#1d2b24;--mute:#6b7a72;--line:#e4e0d2;--err:#b3261e}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Naskh Arabic","Amiri",Tahoma,system-ui,sans-serif;font-size:16px;line-height:1.6}
+  header{background:var(--green);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:4px solid var(--gold)}
+  header h1{margin:0;font-size:18px;flex:1}
+  header select,header button{background:transparent;border:1px solid var(--gold);color:var(--gold-l);padding:6px 10px;border-radius:8px;font:inherit;width:auto}
+  header select option{color:#000}
+  main{max-width:640px;margin:0 auto;padding:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+  h2{margin:0 0 10px;font-size:18px;color:var(--green)}
+  label{display:block;margin:10px 0 4px;font-size:14px;color:var(--mute)}
+  input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+  input:focus,select:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+  .btn{width:100%;margin-top:14px;padding:12px;border:0;border-radius:8px;background:var(--green);color:#fff;font:inherit;font-weight:700}
+  .btn:active{background:var(--green-d)}
+  .btn.sm{width:auto;margin:0;padding:6px 12px;font-size:14px}
+  .btn.del{background:#fff;color:var(--err);border:1px solid var(--err)}
+  .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto}
+  .tabs button{flex:1;min-width:max-content;padding:10px 12px;border:1px solid var(--line);background:#fff;border-radius:8px;font:inherit;color:var(--ink)}
+  .tabs button.on{background:var(--green);color:#fff;border-color:var(--green)}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--gold-l)}
+  .stat b{display:block;font-size:26px;color:var(--green)}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:0}
+  .row small{color:var(--mute);display:block}
+  .msg{margin-top:10px;font-size:14px}
+  .msg.err{color:var(--err)} .msg.ok{color:var(--green)}
+  .empty{color:var(--mute);text-align:center;padding:14px 0}
+  .switch{background:none;border:0;color:var(--green);text-decoration:underline;font:inherit;margin-top:12px;width:100%}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1 data-i18n="app"></h1>
+  <select id="lang" aria-label="Language">
+    <option value="om">Afaan Oromoo</option>
+    <option value="ar">العربية</option>
+    <option value="en">English</option>
+  </select>
+  <button id="logout" class="hide" data-i18n="logout"></button>
+</header>
+<main>
+
+  <section id="auth" class="card">
+    <h2 id="authTitle"></h2>
+    <div id="nameWrap" class="hide">
+      <label for="name" data-i18n="full_name"></label><input id="name" autocomplete="name">
+      <label for="phone" data-i18n="phone"></label><input id="phone" type="tel" dir="ltr" autocomplete="tel">
+    </div>
+    <label for="email" data-i18n="email"></label><input id="email" type="email" dir="ltr" autocomplete="email">
+    <label for="pass" data-i18n="password"></label><input id="pass" type="password" dir="ltr" autocomplete="current-password">
+    <button id="authBtn" class="btn"></button>
+    <button id="authSwitch" class="switch"></button>
+    <div id="authMsg" class="msg err"></div>
+  </section>
+
+  <section id="complete" class="card hide">
+    <h2 data-i18n="complete_title"></h2>
+    <label for="cCountry" data-i18n="country"></label><select id="cCountry"></select>
+    <label for="cCity" data-i18n="city"></label><select id="cCity"></select>
+    <button id="cSave" class="btn" data-i18n="save"></button>
+    <div id="cMsg" class="msg err"></div>
+  </section>
+
+  <section id="home" class="card hide">
+    <h2 id="homeTitle"></h2>
+    <p id="homeText"></p>
+  </section>
+
+  <section id="admin" class="hide">
+    <div class="tabs" id="tabs">
+      <button data-t="overview" class="on" data-i18n="tab_overview"></button>
+      <button data-t="countries" data-i18n="tab_countries"></button>
+      <button data-t="cities" data-i18n="tab_cities"></button>
+      <button data-t="staff" data-i18n="tab_staff"></button>
+    </div>
+
+    <div id="t-overview" class="card">
+      <h2 data-i18n="tab_overview"></h2>
+      <div class="stats" id="stats"></div>
+    </div>
+
+    <div id="t-countries" class="card hide">
+      <h2 data-i18n="tab_countries"></h2>
+      <label for="newCountry" data-i18n="country_name"></label><input id="newCountry">
+      <button id="addCountry" class="btn" data-i18n="add_country"></button>
+      <div id="countryList"></div>
+    </div>
+
+    <div id="t-cities" class="card hide">
+      <h2 data-i18n="tab_cities"></h2>
+      <label for="cityCountry" data-i18n="country"></label><select id="cityCountry"></select>
+      <label for="newCity" data-i18n="city_name"></label><input id="newCity">
+      <button id="addCity" class="btn" data-i18n="add_city"></button>
+      <div id="cityList"></div>
+    </div>
+
+    <div id="t-staff" class="card hide">
+      <h2 data-i18n="staff_title"></h2>
+      <label for="sName" data-i18n="name"></label><input id="sName">
+      <label for="sEmail" data-i18n="email"></label><input id="sEmail" type="email" dir="ltr">
+      <label for="sPass" data-i18n="temp_pass"></label><input id="sPass" type="text" dir="ltr">
+      <label for="sRole" data-i18n="role"></label>
+      <select id="sRole"></select>
+      <label for="sCountry" data-i18n="country"></label><select id="sCountry"></select>
+      <div id="sCityWrap"><label for="sCity" data-i18n="city"></label><select id="sCity"></select></div>
+      <button id="addStaff" class="btn" data-i18n="create_acc"></button>
+      <div id="sMsg" class="msg"></div>
+      <h2 style="margin-top:20px" data-i18n="current_team"></h2>
+      <div id="staffList"></div>
+    </div>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* 1) Paste your Firebase web config here (Project settings > Your apps > Web) */
+const firebaseConfig = {
+  apiKey: "PASTE_API_KEY",
+  authDomain: "PASTE_PROJECT.firebaseapp.com",
+  projectId: "PASTE_PROJECT_ID",
+  appId: "PASTE_APP_ID"
+};
+
+/* ---------- translations: Afaan Oromoo (om), العربية (ar), English (en) ---------- */
+const T = {
+om:{app:"Akaadaamii Nuur Qur'aanaa",logout:"Ba'i",login_title:"Seeni",reg_title:"Herrega barataa banuu",login_btn:"Seeni",reg_btn:"Herrega banuu",
+sw_to_reg:"Herrega hin qabduu? Amma galmaa'i",sw_to_login:"Herrega qabdaa? Seeni",full_name:"Maqaa guutuu",phone:"Lakkoofsa bilbilaa",email:"Imeelii",password:"Jecha icciitii",
+complete_title:"Odeeffannoo kee guuti",country:"Biyya",city:"Magaalaa",pick_country:"Biyya filadhu",pick_city:"Magaalaa filadhu",save:"Olkaa'i",
+tab_overview:"Ilaalcha waliigalaa",tab_countries:"Biyyoota",tab_cities:"Magaalota",tab_staff:"Gaggeessitoota fi barsiisota",
+country_name:"Maqaa biyyaa",add_country:"Biyya dabaluu",city_name:"Maqaa magaalaa",add_city:"Magaalaa dabaluu",
+staff_title:"Herrega gaggeessaa ykn barsiisaa banuu",name:"Maqaa",temp_pass:"Jecha icciitii yeroo (qubee 6 ol)",role:"Gahee",create_acc:"Herrega banuu",current_team:"Garee ammaa",del:"Haqi",
+r_superAdmin:"Hogganaa Olaanaa",r_countrySupervisor:"Gaggeessaa Biyyaa",r_citySupervisor:"Gaggeessaa Magaalaa",r_teacher:"Barsiisaa",r_student:"Barataa",
+s_students:"Barattoota",s_teachers:"Barsiisota",s_csup:"Gaggeessitoota biyyaa",s_ysup:"Gaggeessitoota magaalaa",
+enter_creds:"Imeelii fi jecha icciitii galchi.",enter_name:"Maqaa kee guutuu galchi.",pick_both:"Biyya fi magaalaa filadhu.",fill_all:"Gara hundaa guuti.",
+e_cred:"Imeeliin ykn jechi icciitii dogoggora.",e_email:"Bifni imeelii sirrii miti.",e_inuse:"Imeeliin kun duraan galmaa'eera.",e_weak:"Jechi icciitii gabaabaadha; qubee 6 ol fayyadami.",
+e_net:"Hariiroon interneetii hin jiru.",e_perm:"Hayyamni kee kana hin raawwatu.",e_gen:"Rakkoon hin eegamne uumame.",
+inc_title:"Herregni hin guutamne",inc_text:"Faayiliin kee hin argamne. Bulchiinsa quunnami.",welcome:"Baga nagaan dhufte",
+home_text:"Gaheen kee: {r}. Daashboordiin kee haaromsa itti aanu keessatti asitti mul'ata.",
+empty_c:"Biyyi hin jiru. Biyya jalqabaa gubbaatti dabali.",empty_y:"Magaalaan hin jiru. Biyya filadhuudhaan magaalaa dabali.",empty_t:"Garaan hin jiru.",
+del_first:"Duraan magaalota biyya kanaa haqi.",confirm_del:"{n} haquu?",created:"Herregni {n} banameera. Imeelii fi jecha icciitii yeroo isaaf ergi."},
+ar:{app:"أكاديمية نور القرآن",logout:"خروج",login_title:"تسجيل الدخول",reg_title:"إنشاء حساب طالب",login_btn:"دخول",reg_btn:"إنشاء الحساب",
+sw_to_reg:"ليس لديك حساب؟ سجّل الآن",sw_to_login:"لديك حساب؟ سجّل الدخول",full_name:"الاسم الكامل",phone:"رقم الهاتف",email:"البريد الإلكتروني",password:"كلمة المرور",
+complete_title:"أكمل بياناتك",country:"الدولة",city:"المدينة",pick_country:"اختر الدولة",pick_city:"اختر المدينة",save:"حفظ",
+tab_overview:"نظرة عامة",tab_countries:"الدول",tab_cities:"المدن",tab_staff:"المشرفون والمعلمون",
+country_name:"اسم الدولة",add_country:"إضافة دولة",city_name:"اسم المدينة",add_city:"إضافة مدينة",
+staff_title:"إنشاء حساب مشرف أو معلم",name:"الاسم",temp_pass:"كلمة مرور مؤقتة (6 أحرف على الأقل)",role:"الدور",create_acc:"إنشاء الحساب",current_team:"الفريق الحالي",del:"حذف",
+r_superAdmin:"المدير العام",r_countrySupervisor:"مشرف دولة",r_citySupervisor:"مشرف مدينة",r_teacher:"معلم",r_student:"طالب",
+s_students:"الطلاب",s_teachers:"المعلمون",s_csup:"مشرفو الدول",s_ysup:"مشرفو المدن",
+enter_creds:"أدخل البريد وكلمة المرور.",enter_name:"أدخل اسمك الكامل.",pick_both:"اختر الدولة والمدينة.",fill_all:"املأ كل الحقول.",
+e_cred:"البريد أو كلمة المرور غير صحيحة.",e_email:"صيغة البريد غير صحيحة.",e_inuse:"هذا البريد مسجّل مسبقاً.",e_weak:"كلمة المرور قصيرة، استخدم 6 أحرف على الأقل.",
+e_net:"لا يوجد اتصال بالإنترنت.",e_perm:"ليست لديك صلاحية لهذا الإجراء.",e_gen:"حدث خطأ غير متوقع.",
+inc_title:"الحساب غير مكتمل",inc_text:"لم يتم العثور على ملفك. تواصل مع الإدارة.",welcome:"مرحباً",
+home_text:"دورك: {r}. ستظهر لوحتك الخاصة هنا في التحديث القادم.",
+empty_c:"لا توجد دول بعد. أضف أول دولة من الأعلى.",empty_y:"لا توجد مدن بعد. اختر دولة وأضف مدينة.",empty_t:"لا يوجد فريق بعد.",
+del_first:"احذف مدن هذه الدولة أولاً.",confirm_del:"حذف {n}؟",created:"تم إنشاء حساب {n}. أرسل له البريد وكلمة المرور المؤقتة."},
+en:{app:"Noor Quran Academy",logout:"Log out",login_title:"Log in",reg_title:"Create student account",login_btn:"Log in",reg_btn:"Create account",
+sw_to_reg:"No account? Sign up",sw_to_login:"Have an account? Log in",full_name:"Full name",phone:"Phone number",email:"Email",password:"Password",
+complete_title:"Complete your details",country:"Country",city:"City",pick_country:"Choose country",pick_city:"Choose city",save:"Save",
+tab_overview:"Overview",tab_countries:"Countries",tab_cities:"Cities",tab_staff:"Supervisors & teachers",
+country_name:"Country name",add_country:"Add country",city_name:"City name",add_city:"Add city",
+staff_title:"Create supervisor or teacher account",name:"Name",temp_pass:"Temporary password (min. 6 characters)",role:"Role",create_acc:"Create account",current_team:"Current team",del:"Delete",
+r_superAdmin:"Super Admin",r_countrySupervisor:"Country supervisor",r_citySupervisor:"City supervisor",r_teacher:"Teacher",r_student:"Student",
+s_students:"Students",s_teachers:"Teachers",s_csup:"Country supervisors",s_ysup:"City supervisors",
+enter_creds:"Enter email and password.",enter_name:"Enter your full name.",pick_both:"Choose country and city.",fill_all:"Fill in all fields.",
+e_cred:"Wrong email or password.",e_email:"Email format is not valid.",e_inuse:"This email is already registered.",e_weak:"Password is too short; use at least 6 characters.",
+e_net:"No internet connection.",e_perm:"You don't have permission for this action.",e_gen:"Something went wrong.",
+inc_title:"Account incomplete",inc_text:"Your profile was not found. Contact the administration.",welcome:"Welcome",
+home_text:"Your role: {r}. Your dashboard will appear here in the next update.",
+empty_c:"No countries yet. Add the first one above.",empty_y:"No cities yet. Choose a country and add a city.",empty_t:"No team members yet.",
+del_first:"Delete this country's cities first.",confirm_del:"Delete {n}?",created:"Account created for {n}. Send them the email and temporary password."}
+};
+let lang = 'om';
+try{ lang = localStorage.getItem('noor_lang') || 'om'; }catch(e){}
+const t = (k, v) => { let s = (T[lang][k] ?? T.om[k] ?? k); if(v) for(const x in v) s = s.replace('{'+x+'}', v[x]); return s; };
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth(), db = firebase.firestore();
+const $ = id => document.getElementById(id);
+const AUTH_ERR = {'auth/invalid-credential':'e_cred','auth/invalid-email':'e_email','auth/email-already-in-use':'e_inuse','auth/weak-password':'e_weak','auth/network-request-failed':'e_net','permission-denied':'e_perm'};
+const errText = e => t(AUTH_ERR[e.code] || 'e_gen');
+const show = (id, on=true) => $(id).classList.toggle('hide', !on);
+function el(tag, text, cls){ const n=document.createElement(tag); if(text!=null) n.textContent=text; if(cls) n.className=cls; return n; }
+const roleName = r => t('r_'+r);
+
+let mode = 'login', me = null, countries = [], cities = [], staffCache = [], userCache = [];
+
+/* ---------- language ---------- */
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang==='ar' ? 'rtl' : 'ltr';
+  $('lang').value = lang;
+  document.querySelectorAll('[data-i18n]').forEach(n => n.textContent = t(n.dataset.i18n));
+  const sr = $('sRole'), cur = sr.value || 'countrySupervisor';
+  sr.textContent = '';
+  ['countrySupervisor','citySupervisor','teacher'].forEach(r => { const o = el('option', roleName(r)); o.value=r; sr.append(o); });
+  sr.value = cur;
+  setMode(mode);
+  if(me){
+    if(me.role==='superAdmin'){ renderCountries(); renderCities(); fillStaffForm(); renderStats(); renderStaff(); }
+    else if(me.role==='student' && !me.countryId) fillComplete();
+    else homeText();
+  }
+}
+$('lang').onchange = () => { lang = $('lang').value; try{ localStorage.setItem('noor_lang', lang); }catch(e){} applyLang(); };
+
+/* ---------- auth screen ---------- */
+function setMode(m){
+  mode = m;
+  $('authTitle').textContent = t(m==='login' ? 'login_title' : 'reg_title');
+  $('authBtn').textContent = t(m==='login' ? 'login_btn' : 'reg_btn');
+  $('authSwitch').textContent = t(m==='login' ? 'sw_to_reg' : 'sw_to_login');
+  show('nameWrap', m==='register');
+  $('pass').autocomplete = m==='login' ? 'current-password' : 'new-password';
+  $('authMsg').textContent = '';
+}
+$('authSwitch').onclick = () => setMode(mode==='login' ? 'register' : 'login');
+
+$('authBtn').onclick = async () => {
+  const email = $('email').value.trim(), pass = $('pass').value;
+  $('authMsg').textContent = '';
+  if(!email || !pass){ $('authMsg').textContent=t('enter_creds'); return; }
+  try{
+    if(mode==='login'){
+      await auth.signInWithEmailAndPassword(email, pass);
+    }else{
+      const name = $('name').value.trim();
+      if(!name){ $('authMsg').textContent=t('enter_name'); return; }
+      const cred = await auth.createUserWithEmailAndPassword(email, pass);
+      await db.collection('users').doc(cred.user.uid).set({
+        name, phone: $('phone').value.trim(), email,
+        role:'student', countryId:null, cityId:null,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+  }catch(e){ $('authMsg').textContent = errText(e); }
+};
+$('logout').onclick = () => auth.signOut();
+
+/* ---------- session ---------- */
+auth.onAuthStateChanged(async user => {
+  ['auth','complete','home','admin'].forEach(i => show(i,false));
+  show('logout', !!user);
+  if(!user){ me=null; show('auth'); return; }
+  try{
+    let snap = await db.collection('users').doc(user.uid).get();
+    if(!snap.exists){ await new Promise(r=>setTimeout(r,800)); snap = await db.collection('users').doc(user.uid).get(); }
+    if(!snap.exists){ show('home'); $('homeTitle').textContent=t('inc_title'); $('homeText').textContent=t('inc_text'); return; }
+    me = {uid:user.uid, ...snap.data()};
+    await route();
+  }catch(e){ show('auth'); $('authMsg').textContent = errText(e); }
+});
+
+function homeText(){
+  $('homeTitle').textContent = t('welcome') + ' ' + (me.name||'');
+  $('homeText').textContent = t('home_text', {r: roleName(me.role)});
+}
+function fillComplete(){
+  const cc = $('cCountry').value;
+  fillSelect($('cCountry'), countries, t('pick_country')); $('cCountry').value = cc;
+  $('cCountry').onchange = () => fillSelect($('cCity'), cities.filter(c=>c.countryId===$('cCountry').value), t('pick_city'));
+  $('cCountry').onchange();
+}
+async function route(){
+  if(me.role==='superAdmin'){ show('admin'); await loadAll(); return; }
+  if(me.role==='student' && !me.countryId){ await loadRef(); fillComplete(); show('complete'); return; }
+  show('home'); homeText();
+}
+
+$('cSave').onclick = async () => {
+  const countryId = $('cCountry').value, cityId = $('cCity').value;
+  if(!countryId || !cityId){ $('cMsg').textContent=t('pick_both'); return; }
+  try{
+    await db.collection('users').doc(me.uid).update({countryId, cityId});
+    me.countryId = countryId; me.cityId = cityId;
+    show('complete', false); await route();
+  }catch(e){ $('cMsg').textContent = errText(e); }
+};
+
+/* ---------- data helpers ---------- */
+async function loadRef(){
+  const [a,b] = await Promise.all([db.collection('countries').get(), db.collection('cities').get()]);
+  countries = a.docs.map(d=>({id:d.id, ...d.data()})).sort((x,y)=>x.name.localeCompare(y.name));
+  cities = b.docs.map(d=>({id:d.id, ...d.data()})).sort((x,y)=>x.name.localeCompare(y.name));
+}
+function fillSelect(sel, items, placeholder){
+  sel.textContent = '';
+  const o = el('option', placeholder); o.value=''; sel.append(o);
+  items.forEach(i => { const x = el('option', i.name); x.value=i.id; sel.append(x); });
+}
+const countryName = id => (countries.find(c=>c.id===id)||{}).name || '—';
+const cityName = id => (cities.find(c=>c.id===id)||{}).name || '—';
+
+/* ---------- super admin ---------- */
+$('tabs').onclick = e => {
+  const tab = e.target.dataset && e.target.dataset.t; if(!tab) return;
+  [...$('tabs').children].forEach(b => b.classList.toggle('on', b===e.target));
+  ['overview','countries','cities','staff'].forEach(x => show('t-'+x, x===tab));
+};
+
+async function loadAll(){
+  await loadRef();
+  userCache = (await db.collection('users').get()).docs.map(d=>({id:d.id, ...d.data()}));
+  renderCountries(); renderCities(); fillStaffForm(); renderStats(); renderStaff();
+}
+
+function renderStats(){
+  const n = r => userCache.filter(u=>u.role===r).length;
+  const items = [[t('tab_countries'),countries.length],[t('tab_cities'),cities.length],[t('s_students'),n('student')],[t('s_teachers'),n('teacher')],
+                 [t('s_csup'),n('countrySupervisor')],[t('s_ysup'),n('citySupervisor')]];
+  $('stats').textContent = '';
+  items.forEach(([l,v]) => { const s = el('div',null,'stat'); s.append(el('b',v), el('span',l)); $('stats').append(s); });
+}
+
+function listInto(box, rows, emptyText){
+  box.textContent = '';
+  if(!rows.length){ box.append(el('div', emptyText, 'empty')); return; }
+  rows.forEach(r => box.append(r));
+}
+function rowEl(title, sub, onDelete){
+  const r = el('div',null,'row'), d = el('div');
+  d.append(el('span',title)); if(sub) d.append(el('small',sub));
+  r.append(d);
+  if(onDelete){ const b = el('button',t('del'),'btn sm del'); b.onclick = onDelete; r.append(b); }
+  return r;
+}
+
+function renderCountries(){
+  listInto($('countryList'), countries.map(c => rowEl(c.name, null, async () => {
+    if(cities.some(x=>x.countryId===c.id)){ alert(t('del_first')); return; }
+    if(!confirm(t('confirm_del',{n:c.name}))) return;
+    await db.collection('countries').doc(c.id).delete(); await loadAll();
+  })), t('empty_c'));
+  const cur = $('cityCountry').value;
+  fillSelect($('cityCountry'), countries, t('pick_country')); $('cityCountry').value = cur;
+}
+$('addCountry').onclick = async () => {
+  const name = $('newCountry').value.trim(); if(!name) return;
+  await db.collection('countries').add({name}); $('newCountry').value=''; await loadAll();
+};
+
+function renderCities(){
+  listInto($('cityList'), cities.map(c => rowEl(c.name, countryName(c.countryId), async () => {
+    if(!confirm(t('confirm_del',{n:c.name}))) return;
+    await db.collection('cities').doc(c.id).delete(); await loadAll();
+  })), t('empty_y'));
+}
+$('addCity').onclick = async () => {
+  const name = $('newCity').value.trim(), countryId = $('cityCountry').value;
+  if(!name || !countryId) return;
+  await db.collection('cities').add({name, countryId}); $('newCity').value=''; await loadAll();
+};
+
+function fillStaffForm(){
+  const cc = $('sCountry').value;
+  fillSelect($('sCountry'), countries, t('pick_country')); $('sCountry').value = cc;
+  const upd = () => fillSelect($('sCity'), cities.filter(c=>c.countryId===$('sCountry').value), t('pick_city'));
+  $('sCountry').onchange = upd; upd();
+  const roleUpd = () => show('sCityWrap', $('sRole').value!=='countrySupervisor');
+  $('sRole').onchange = roleUpd; roleUpd();
+}
+
+function renderStaff(){
+  const rows = userCache.filter(u=>['countrySupervisor','citySupervisor','teacher'].includes(u.role)).map(u =>
+    rowEl(u.name, roleName(u.role) + ' · ' + countryName(u.countryId) + (u.cityId ? ' · ' + cityName(u.cityId) : '') + ' · ' + u.email));
+  listInto($('staffList'), rows, t('empty_t'));
+}
+
+/* Creating another person's login must not sign the admin out, so use a second app instance. */
+$('addStaff').onclick = async () => {
+  const msg = $('sMsg'); msg.className='msg'; msg.textContent='';
+  const name=$('sName').value.trim(), email=$('sEmail').value.trim(), pass=$('sPass').value;
+  const role=$('sRole').value, countryId=$('sCountry').value;
+  const cityId = role==='countrySupervisor' ? null : $('sCity').value;
+  if(!name||!email||!pass||!countryId||(role!=='countrySupervisor'&&!cityId)){ msg.className='msg err'; msg.textContent=t('fill_all'); return; }
+  try{
+    const sec = firebase.apps.find(a=>a.name==='secondary') || firebase.initializeApp(firebaseConfig,'secondary');
+    const cred = await sec.auth().createUserWithEmailAndPassword(email, pass);
+    await db.collection('users').doc(cred.user.uid).set({
+      name, email, role, countryId, cityId, phone:'',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    await sec.auth().signOut();
+    msg.className='msg ok'; msg.textContent=t('created',{n:name});
+    ['sName','sEmail','sPass'].forEach(i=>$(i).value='');
+    userCache = (await db.collection('users').get()).docs.map(d=>({id:d.id, ...d.data()}));
+    renderStaff(); renderStats();
+  }catch(e){ msg.className='msg err'; msg.textContent = errText(e); }
+};
+
+applyLang();
+</script>
+</body>
+</html>
