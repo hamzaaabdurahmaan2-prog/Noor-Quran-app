@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qur'aana Qulqulluu</title>
+<style>
+:root{--g:#0b6b3a;--gd:#084d2a;--gold:#c9a227;--bg:#f7f5ec;--card:#fff;--tx:#1c2b22}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:84px}
+header{position:sticky;top:0;z-index:5;background:var(--g);color:#fff;padding:10px 12px;border-bottom:3px solid var(--gold)}
+header h1{margin:0 0 8px;font-size:17px}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+select,button{font:inherit;border-radius:8px;border:1px solid var(--gold);padding:8px;background:#fff;color:var(--tx)}
+select{flex:1;min-width:0}
+button.gold{background:var(--gold);color:#1c1c1c;border:0;font-weight:600}
+#bismillah{text-align:center;font-family:"Amiri","Traditional Arabic",serif;font-size:26px;color:var(--g);padding:14px 8px 4px}
+#ayahs{padding:8px 12px}
+.ayah{background:var(--card);border-radius:12px;padding:12px;margin:8px 0;border:1px solid #e4dfc8;transition:background .2s}
+.ayah.on{background:#fff4c9;border-color:var(--gold)}
+.ayah .t{font-family:"Amiri","Traditional Arabic",serif;font-size:26px;line-height:2.1;direction:rtl;text-align:right}
+.ayah .m{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.num{background:var(--g);color:#fff;border-radius:50%;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.ayah button{padding:4px 12px}
+#bar{position:fixed;bottom:0;left:0;right:0;background:var(--gd);color:#fff;padding:10px 12px;display:flex;gap:8px;align-items:center;border-top:3px solid var(--gold)}
+#bar span{flex:1;font-size:14px}
+#msg{text-align:center;padding:20px;color:#a33}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title"></h1>
+  <div class="row">
+    <select id="surah"></select>
+    <select id="reciter"></select>
+    <select id="lang"><option value="om">Afaan Oromoo</option><option value="ar">العربية</option><option value="en">English</option></select>
+  </div>
+</header>
+<div id="bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+<div id="ayahs"></div>
+<div id="msg"></div>
+<div id="bar">
+  <span id="now"></span>
+  <button class="gold" id="playAll"></button>
+  <button id="pause">⏸</button>
+  <button id="stop">⏹</button>
+</div>
+
+<script src="quran-audio.js"></script>
+<script>
+var NAMES=["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+var T={
+ om:{title:"Qur'aana Qulqulluu",play:"▶ Suuraa dhaggeefadhu",listen:"▶ Dhaggeefadhu",surah:"Suuraa",ayah:"Aayaa",loading:"Qur'aanni fe'amaa jira…",err:"Sagalee banuu hin dandeenye. Interneetii mirkaneessi.",none:"Faayilli quran-uthmani.txt hin argamne."},
+ ar:{title:"القرآن الكريم",play:"▶ استماع للسورة",listen:"▶ استماع",surah:"سورة",ayah:"آية",loading:"جارٍ تحميل القرآن…",err:"تعذّر تشغيل الصوت. تأكد من الإنترنت.",none:"لم يتم العثور على ملف quran-uthmani.txt"},
+ en:{title:"The Holy Quran",play:"▶ Play surah",listen:"▶ Listen",surah:"Surah",ayah:"Ayah",loading:"Loading the Quran…",err:"Could not play audio. Check your internet.",none:"quran-uthmani.txt not found."}
+};
+var lang=localStorage.getItem("nqa_lang")||"om", data={}, cur=1;
+var $=function(i){return document.getElementById(i)};
+
+function strip(s){return s.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g,"").replace(/ٱ/g,"ا")}
+function parse(txt){
+  txt.split("\n").forEach(function(l){
+    if(!l||l[0]==="#")return;
+    var p=l.split("|"); if(p.length<3)return;
+    var s=+p[0],a=+p[1],t=p.slice(2).join("|").trim();
+    if(a===1&&s!==1&&s!==9){
+      var w=t.split(" ");
+      if(strip(w.slice(0,4).join(" "))==="بسم الله الرحمن الرحيم")t=w.slice(4).join(" ");
+    }
+    (data[s]=data[s]||[])[a]=t;
+  });
+}
+function applyLang(){
+  var t=T[lang];
+  document.documentElement.lang=lang;
+  document.body.dir=lang==="ar"?"rtl":"ltr";
+  $("title").textContent="🕌 "+t.title;
+  $("playAll").textContent=t.play;
+  $("lang").value=lang;
+  var o="";NAMES.forEach(function(n,i){o+='<option value="'+(i+1)+'">'+(i+1)+". "+n+"</option>"});
+  $("surah").innerHTML=o;$("surah").value=cur;
+  var r="",R=QuranAudio.reciters;
+  for(var k in R)r+='<option value="'+k+'">'+R[k].name+"</option>";
+  $("reciter").innerHTML=r;$("reciter").value=QuranAudio.getReciter();
+  render();
+}
+function render(){
+  var t=T[lang],list=data[cur],h="";
+  $("bismillah").style.display=(cur===1||cur===9)?"none":"block";
+  if(!list){$("ayahs").innerHTML="";return}
+  for(var a=1;a<list.length;a++){
+    h+='<div class="ayah" id="a'+a+'"><div class="t">'+list[a]+'</div><div class="m"><span class="num">'+a+'</span><button onclick="QuranAudio.playSurah('+cur+','+a+')">'+t.listen+"</button></div></div>";
+  }
+  $("ayahs").innerHTML=h;
+  $("now").textContent=NAMES[cur-1];
+}
+function mark(s,a){
+  var old=document.querySelector(".ayah.on");if(old)old.classList.remove("on");
+  if(s!==cur){cur=s;$("surah").value=s;render()}
+  var e=$("a"+a);if(e){e.classList.add("on");e.scrollIntoView({behavior:"smooth",block:"center"})}
+  $("now").textContent=NAMES[s-1]+" : "+a;
+}
+$("surah").onchange=function(){QuranAudio.stop();cur=+this.value;render();window.scrollTo(0,0)};
+$("reciter").onchange=function(){QuranAudio.setReciter(this.value)};
+$("lang").onchange=function(){lang=this.value;localStorage.setItem("nqa_lang",lang);applyLang()};
+$("playAll").onclick=function(){QuranAudio.playSurah(cur,1)};
+$("pause").onclick=function(){QuranAudio.isPlaying()?QuranAudio.pause():QuranAudio.resume()};
+$("stop").onclick=function(){QuranAudio.stop()};
+document.addEventListener("quranaudio:ayah",function(e){$("msg").textContent="";mark(e.detail.surah,e.detail.ayah)});
+document.addEventListener("quranaudio:stop",function(){var o=document.querySelector(".ayah.on");if(o)o.classList.remove("on")});
+document.addEventListener("quranaudio:error",function(){$("msg").textContent=T[lang].err});
+
+$("msg").textContent=T[lang].loading;
+fetch("quran-uthmani.txt").then(function(r){if(!r.ok)throw 0;return r.text()})
+ .then(function(txt){parse(txt);$("msg").textContent="";applyLang()})
+ .catch(function(){$("msg").textContent=T[lang].none;applyLang()});
+</script>
+</body>
+</html>
